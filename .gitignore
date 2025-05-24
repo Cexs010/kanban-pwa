@@ -25,3 +25,6 @@ dist-ssr
 
 #dev dist
 dev-dist/
+
+# Local env files
+.env
