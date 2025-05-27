@@ -11,8 +11,8 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.svg", "favicon.ico", "robots.txt"],
       manifest: {
-        name: "Kanban",
-        short_name: "Kanban",
+        name: "AgilBan",
+        short_name: "AgilBan",
         description: "Gestión de tareas para equipos de desarrollo",
         theme_color: "#ffffff",
         background_color: "#ffffff",
