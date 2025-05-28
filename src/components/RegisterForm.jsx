@@ -128,7 +128,7 @@ const RegisterForm = () => {
       <button
         type="submit"
         disabled={loading}
-        className={`mt-4 text-white bg-cyan-900 hover:bg-cyan-700 font-medium rounded-md text-sm h-10 w-full ${
+        className={`mt-4 text-white bg-cyan-900 hover:bg-cyan-700 transition duration-300 font-medium rounded-md text-sm h-10 w-full ${
           loading ? "opacity-70 cursor-not-allowed" : ""
         }`}
       >

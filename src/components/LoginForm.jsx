@@ -84,7 +84,7 @@ function LoginForm() {
         <button
           type="submit"
           disabled={loading}
-          className={`text-white bg-cyan-900 hover:bg-cyan-700 font-medium rounded-lg text-sm h-10 p-2 w-full text-center ${
+          className={`text-white bg-cyan-900 hover:bg-cyan-700 transition duration-300 font-medium rounded-lg text-sm h-10 p-2 w-full text-center ${
             loading ? "opacity-70 cursor-not-allowed" : ""
           }`}
         >
