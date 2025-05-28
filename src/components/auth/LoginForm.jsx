@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginWithEmail, loginWithGoogle } from "../services/authFirebase";
+import { loginWithEmail, loginWithGoogle } from "../../services/firebase/authFirebase";
 import toast from "react-hot-toast";
 
 function LoginForm() {
@@ -18,6 +18,7 @@ function LoginForm() {
       toast.success("¡Inicio de sesión exitoso!");
       setEmail("");
       setPassword("");
+      navigate('/kanban');
     } catch (err) {
       toast.error(err.message);
     } finally {

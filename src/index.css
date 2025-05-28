@@ -1,2 +1,13 @@
 @import "tailwindcss";
 
+/* Efecto de levantamiento al arrastrar */
+[data-dragging="true"] {
+  box-shadow: 0 10px 20px rgba(128, 90, 213, 0.2);
+  transform: scale(1.02);
+}
+
+/* Scroll horizontal en columnas */
+.overflow-x-auto {
+  scrollbar-width: thin;
+  scrollbar-color: #C7D2FE #EDE9FE;
+}

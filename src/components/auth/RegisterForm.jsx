@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   registerWithEmail,
   loginWithGoogle,
-} from "../services/registerFirebase";
+} from "../../services/firebase/registerFirebase";
 
 const RegisterForm = () => {
   const [email, setEmail] = useState("");
@@ -22,6 +22,7 @@ const RegisterForm = () => {
       setEmail("");
       setPassword("");
       setDisplayName("");
+      navigate('/kanban');
     } catch (err) {
       toast.error(err.message);
     } finally {

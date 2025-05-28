@@ -1,14 +1,22 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../../services/firebase/firebase";
 
-const Navbar = () => {
+const NavbarKanban = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    navigate("/");
+  };
 
   return (
     <nav className="h-16 bg-cyan-900 bg-opacity-90 backdrop-blur-sm shadow-lg overflow-visible">
       <div className="container mx-auto flex items-center justify-between h-full px-4">
         <Link
-          to="/"
+          to="/dashboard"
           className="flex items-center space-x-2 text-white font-bold text-xl"
         >
           <img
@@ -16,7 +24,7 @@ const Navbar = () => {
             alt="Logo"
             className="w-15 h-15 object-contain mr-5"
           />
-          Inicio
+          Tablero
         </Link>
 
         {/* Botón hamburguesa */}
@@ -52,17 +60,17 @@ const Navbar = () => {
         {/* Links en pantallas grandes */}
         <div className="hidden md:flex gap-x-8">
           <Link
-            to="/login"
+            to="/profile"
             className="text-white px-4 py-2 hover:bg-white/20 hover:rounded-lg transition-all duration-300"
           >
-            Iniciar Sesión
+            Perfil
           </Link>
-          <Link
-            to="/register"
-            className="text-white px-4 py-2 hover:bg-white/20 hover:rounded-lg transition-all duration-300"
+          <button
+            onClick={handleLogout}
+            className="text-white px-4 py-2 hover:bg-red-600 hover:rounded-lg transition-all duration-300"
           >
-            Registrarse
-          </Link>
+            Cerrar Sesión
+          </button>
         </div>
       </div>
 
@@ -71,23 +79,25 @@ const Navbar = () => {
         <div className="md:hidden flex px-5 py-3 bg-cyan-900 flex-col gap-2">
           <hr className="border-white/20"/>
           <Link
-            to="/login"
+            to="/profile"
             onClick={() => setMenuOpen(false)}
             className="text-white px-4 py-2 bg-cyan-800 rounded-lg hover:bg-cyan-700 transition"
           >
-            Iniciar Sesión
+            Perfil
           </Link>
-          <Link
-            to="/register"
-            onClick={() => setMenuOpen(false)}
-            className="text-white px-4 py-2 bg-cyan-800 rounded-lg hover:bg-cyan-700 transition"
+          <button
+            onClick={() => {
+              handleLogout();
+              setMenuOpen(false);
+            }}
+            className="text-white px-4 py-2 text-start bg-red-600 rounded-lg hover:bg-red-500 transition"
           >
-            Registrarse
-          </Link>
+            Cerrar Sesión
+          </button>
         </div>
       )}
     </nav>
   );
 };
 
-export default Navbar;
+export default NavbarKanban;
