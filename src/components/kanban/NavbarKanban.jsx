@@ -16,7 +16,7 @@ const NavbarKanban = () => {
     <nav className="h-16 bg-cyan-900 bg-opacity-90 backdrop-blur-sm shadow-lg overflow-visible">
       <div className="container mx-auto flex items-center justify-between h-full px-4">
         <Link
-          to="/dashboard"
+          to="/home"
           className="flex items-center space-x-2 text-white font-bold text-xl"
         >
           <img

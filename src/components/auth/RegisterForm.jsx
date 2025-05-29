@@ -22,7 +22,7 @@ const RegisterForm = () => {
       setEmail("");
       setPassword("");
       setDisplayName("");
-      navigate('/kanban');
+      navigate('/home');
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -68,7 +68,7 @@ const RegisterForm = () => {
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
             className="mt-1 bg-gray-50 border border-gray-300 text-sm rounded-md w-full h-9 px-3"
-            placeholder="Tu nombre"
+            placeholder="Ingresa tu nombre completo"
             autoComplete="off"
             required
           />
@@ -84,7 +84,7 @@ const RegisterForm = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="mt-1 bg-gray-50 border border-gray-300 text-sm rounded-md w-full h-9 px-3"
-            placeholder="ejemplo@correo.com"
+            placeholder="Ingresa tu correo electrónico"
             autoComplete="off"
             required
           />
@@ -103,7 +103,7 @@ const RegisterForm = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="mt-1 bg-gray-50 border border-gray-300 text-sm rounded-md w-full h-9 px-3"
-            placeholder="Mínimo 6 caracteres"
+            placeholder="Ingresa tu contraseña"
             minLength="6"
             autoComplete="off"
             required

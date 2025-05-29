@@ -18,7 +18,7 @@ function LoginForm() {
       toast.success("¡Inicio de sesión exitoso!");
       setEmail("");
       setPassword("");
-      navigate('/kanban');
+      navigate('/home');
     } catch (err) {
       toast.error(err.message);
     } finally {

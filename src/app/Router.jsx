@@ -7,6 +7,8 @@ import Register from "../views/RegisterView.jsx";
 import KanbanView from "../views/KanbanView.jsx";
 import ProtectedRoute from "../components/auth/ProtectedRoute.jsx";
 import NavbarKanban from "../components/kanban/NavbarKanban.jsx"
+import ProfileView from "../views/ProfileView.jsx";
+import HomeView from "../views/HomeView.jsx";
 
 const Router = () => {
   const { user } = useAuth();
@@ -23,6 +25,22 @@ const Router = () => {
           element={
             <ProtectedRoute>
               <KanbanView />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfileView />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <HomeView />
             </ProtectedRoute>
           }
         />
