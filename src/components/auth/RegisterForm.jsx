@@ -48,7 +48,7 @@ const RegisterForm = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-gray-200 p-4 sm:p-6 rounded-xl shadow-md w-full max-w-xs sm:max-w-sm border border-gray-300"
+      className="bg-white/95 p-4 sm:p-6 rounded-xl shadow-md w-full max-w-xs sm:max-w-sm border border-gray-300"
     >
       <h1 className="text-center text-xl sm:text-2xl font-semibold mb-3 sm:mb-4">
         Crear Cuenta

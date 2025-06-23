@@ -45,7 +45,7 @@ function LoginForm() {
     <div className="w-full max-w-sm">
       <form
         onSubmit={handleSubmit}
-        className="bg-gray-200 p-7 rounded-lg shadow-md border border-gray-300"
+        className="bg-white/95 p-7 rounded-lg shadow-md border border-gray-300"
       >
         <h1 className="text-center text-2xl font-semibold mb-5">Iniciar Sesión</h1>
 
