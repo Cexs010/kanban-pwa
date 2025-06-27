@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ChevronRight, Rocket, Users, BarChart3, CheckCircle, ArrowRight, Star } from 'lucide-react';
+import { Rocket, Users, BarChart3, CheckCircle, ArrowRight, Star } from 'lucide-react';
 
 const CTAButton = ({ to, text, variant = 'primary', className = '' }) => {
   const baseClasses = "inline-flex items-center px-8 py-4 text-lg font-semibold rounded-full transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4";
@@ -152,11 +152,9 @@ const LandingPage = () => {
                 "Tableros Kanban personalizables",
                 "Colaboración en tiempo real",
                 "Plantillas predefinidas",
-                "Integraciones con herramientas populares",
                 "Informes y análisis avanzados",
                 "Soporte 24/7 en español",
-                "Seguridad empresarial",
-                "Apps móviles nativas"
+                "Seguridad empresarial"
               ].map((benefit, index) => (
                 <div key={index} className="flex items-center space-x-3">
                   <CheckCircle className="w-6 h-6 text-cyan-400 flex-shrink-0" />
