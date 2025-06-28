@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginWithEmail, loginWithGoogle } from "../../services/firebase/authFirebase";
+import {
+  loginWithEmail,
+  loginWithGoogle,
+} from "../../services/firebase/authFirebase";
 import toast from "react-hot-toast";
 
 function LoginForm() {
@@ -18,7 +21,7 @@ function LoginForm() {
       toast.success("¡Inicio de sesión exitoso!");
       setEmail("");
       setPassword("");
-      navigate('/home');
+      navigate("/home");
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -45,72 +48,79 @@ function LoginForm() {
     <div className="w-full max-w-sm">
       <form
         onSubmit={handleSubmit}
-        className="bg-white/95 p-7 rounded-lg shadow-md border border-gray-300"
+        className="bg-white/95 p-4 sm:p-6 rounded-lg shadow-md border border-gray-300"
       >
-        <h1 className="text-center text-2xl font-semibold mb-5">Iniciar Sesión</h1>
+        <h1 className="text-center text-xl sm:text-2xl font-semibold mb-3 sm:mb-4">
+          Iniciar Sesión
+        </h1>
 
-        <div className="mb-5">
-          <label htmlFor="email" className="text-sm font-medium text-gray-700">
-            Correo Electrónico
-          </label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block h-10 w-full py-2 px-3.5"
-            placeholder="Ingresa tu correo"
-            required
-          />
-        </div>
+        <div className="flex flex-col gap-3 sm:gap-4">
+          <div>
+            <label
+              htmlFor="email"
+              className="text-sm font-medium text-gray-700"
+            >
+              Correo Electrónico
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block h-10 w-full py-2 px-3.5"
+              placeholder="Ingresa tu correo"
+              required
+            />
+          </div>
 
-        <div className="mb-5">
-          <label
-            htmlFor="password"
-            className="text-sm font-medium text-gray-700"
+          <div>
+            <label
+              htmlFor="password"
+              className="text-sm font-medium text-gray-700"
+            >
+              Contraseña
+            </label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Ingresa tu contraseña"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full h-10 py-2 px-3.5"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className={`text-white bg-cyan-900 hover:bg-cyan-700 transition duration-300 font-medium rounded-lg text-sm h-10 p-2 w-full text-center ${
+              loading ? "opacity-70 cursor-not-allowed" : ""
+            }`}
           >
-            Contraseña
-          </label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Ingresa tu contraseña"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full h-10 py-2 px-3.5"
-            required
-          />
+            {loading ? "Cargando..." : "Iniciar sesión"}
+          </button>
+
+          <div className="my-4 flex items-center">
+            <div className="flex-grow border-t border-gray-400"></div>
+            <span className="mx-3 text-gray-600 text-sm">o</span>
+            <div className="flex-grow border-t border-gray-400"></div>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleGoogleLogin}
+            disabled={loading}
+            className="flex items-center justify-center gap-2 w-full text-gray-700 bg-white hover:bg-gray-100 font-medium rounded-lg text-sm p-2 h-10 border border-gray-300"
+          >
+            <img
+              src="https://www.google.com/favicon.ico"
+              alt="Google"
+              className="w-4 h-4"
+            />
+            Continuar con Google
+          </button>
         </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className={`text-white bg-cyan-900 hover:bg-cyan-700 transition duration-300 font-medium rounded-lg text-sm h-10 p-2 w-full text-center ${
-            loading ? "opacity-70 cursor-not-allowed" : ""
-          }`}
-        >
-          {loading ? "Cargando..." : "Iniciar sesión"}
-        </button>
-
-        <div className="my-4 flex items-center">
-          <div className="flex-grow border-t border-gray-400"></div>
-          <span className="mx-3 text-gray-600 text-sm">o</span>
-          <div className="flex-grow border-t border-gray-400"></div>
-        </div>
-
-        <button
-          type="button"
-          onClick={handleGoogleLogin}
-          disabled={loading}
-          className="flex items-center justify-center gap-2 w-full text-gray-700 bg-white hover:bg-gray-100 font-medium rounded-lg text-sm p-2 h-10 border border-gray-300"
-        >
-          <img
-            src="https://www.google.com/favicon.ico"
-            alt="Google"
-            className="w-4 h-4"
-          />
-          Continuar con Google
-        </button>
       </form>
     </div>
   );

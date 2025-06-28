@@ -1,71 +1,10 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { auth } from "../services/firebase/firebase";
 import { groupService } from "../services/firebase/groupFirebase";
 import Sidebar from "../components/kanban/Sidebar";
 import { Plus, Users, FileText, BarChart3, Kanban, X } from "lucide-react";
 import toast from "react-hot-toast";
-
-// Componente Kanban específico de grupo
-const KanbanContent = ({ groupId, groupName }) => (
-  <div className="space-y-6">
-    <div className="flex items-center justify-between">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Tablero Kanban</h1>
-        <p className="text-gray-600">{groupName}</p>
-      </div>
-      <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2">
-        <Plus size={20} />
-        <span>Nueva Tarea</span>
-      </button>
-    </div>
-    
-    <div className="bg-white rounded-lg shadow-sm border p-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Columna To Do */}
-        <div className="space-y-4">
-          <h3 className="font-semibold text-gray-900 flex items-center space-x-2">
-            <div className="w-3 h-3 bg-gray-400 rounded-full"></div>
-            <span>Por Hacer</span>
-            <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">0</span>
-          </h3>
-          <div className="space-y-3 min-h-[200px] p-4 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
-            <p className="text-gray-500 text-sm text-center">
-              No hay tareas pendientes
-            </p>
-          </div>
-        </div>
-
-        {/* Columna In Progress */}
-        <div className="space-y-4">
-          <h3 className="font-semibold text-gray-900 flex items-center space-x-2">
-            <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-            <span>En Progreso</span>
-            <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded-full text-xs">0</span>
-          </h3>
-          <div className="space-y-3 min-h-[200px] p-4 bg-blue-50 rounded-lg border-2 border-dashed border-blue-200">
-            <p className="text-blue-500 text-sm text-center">
-              No hay tareas en progreso
-            </p>
-          </div>
-        </div>
-
-        {/* Columna Done */}
-        <div className="space-y-4">
-          <h3 className="font-semibold text-gray-900 flex items-center space-x-2">
-            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-            <span>Completado</span>
-            <span className="bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs">0</span>
-          </h3>
-          <div className="space-y-3 min-h-[200px] p-4 bg-green-50 rounded-lg border-2 border-dashed border-green-200">
-            <p className="text-green-500 text-sm text-center">
-              No hay tareas completadas
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-);
 
 // Componente de Miembros específico de grupo
 const GroupUsersContent = ({ groupId, groupName }) => (
@@ -80,7 +19,7 @@ const GroupUsersContent = ({ groupId, groupName }) => (
         <span>Invitar Miembro</span>
       </button>
     </div>
-    
+
     <div className="bg-white rounded-lg shadow-sm border">
       <div className="p-6">
         <div className="text-center py-8">
@@ -104,7 +43,7 @@ const GroupReportsContent = ({ groupId, groupName }) => (
       <h1 className="text-3xl font-bold text-gray-900">Reportes del Grupo</h1>
       <p className="text-gray-600">{groupName}</p>
     </div>
-    
+
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div className="bg-white rounded-lg shadow-sm border p-6">
         <h2 className="text-xl font-semibold mb-4">Progreso del Proyecto</h2>
@@ -114,21 +53,22 @@ const GroupReportsContent = ({ groupId, groupName }) => (
             <span className="text-green-600 font-bold">0/0</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
-            <div className="bg-gray-300 h-2 rounded-full" style={{ width: '0%' }}></div>
+            <div
+              className="bg-gray-300 h-2 rounded-full"
+              style={{ width: "0%" }}
+            ></div>
           </div>
           <p className="text-sm text-gray-500">
             Los reportes se actualizarán cuando agregues tareas
           </p>
         </div>
       </div>
-      
+
       <div className="bg-white rounded-lg shadow-sm border p-6">
         <h2 className="text-xl font-semibold mb-4">Actividad del Grupo</h2>
         <div className="text-center py-8">
           <BarChart3 size={48} className="mx-auto text-gray-300 mb-4" />
-          <p className="text-gray-500">
-            No hay actividad reciente
-          </p>
+          <p className="text-gray-500">No hay actividad reciente</p>
         </div>
       </div>
     </div>
@@ -140,7 +80,9 @@ const GroupDocumentsContent = ({ groupId, groupName }) => (
   <div className="space-y-6">
     <div className="flex items-center justify-between">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Documentos del Grupo</h1>
+        <h1 className="text-3xl font-bold text-gray-900">
+          Documentos del Grupo
+        </h1>
         <p className="text-gray-600">{groupName}</p>
       </div>
       <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2">
@@ -148,13 +90,11 @@ const GroupDocumentsContent = ({ groupId, groupName }) => (
         <span>Subir Documento</span>
       </button>
     </div>
-    
+
     <div className="bg-white rounded-lg shadow-sm border p-6">
       <div className="text-center py-12">
         <FileText size={48} className="mx-auto text-gray-300 mb-4" />
-        <p className="text-gray-500 mb-2">
-          No hay documentos en este grupo
-        </p>
+        <p className="text-gray-500 mb-2">No hay documentos en este grupo</p>
         <p className="text-sm text-gray-400">
           Sube documentos para compartir con tu equipo
         </p>
@@ -186,7 +126,9 @@ const CreateGroupModal = ({ isOpen, onClose, onCreateGroup, isLoading }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
         <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-xl font-semibold text-gray-900">Crear Nuevo Grupo</h2>
+          <h2 className="text-xl font-semibold text-gray-900">
+            Crear Nuevo Grupo
+          </h2>
           <button
             onClick={handleClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -195,10 +137,13 @@ const CreateGroupModal = ({ isOpen, onClose, onCreateGroup, isLoading }) => {
             <X size={24} />
           </button>
         </div>
-        
+
         <form onSubmit={handleSubmit} className="p-6">
           <div className="mb-4">
-            <label htmlFor="groupName" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="groupName"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Nombre del Grupo
             </label>
             <input
@@ -212,7 +157,7 @@ const CreateGroupModal = ({ isOpen, onClose, onCreateGroup, isLoading }) => {
               required
             />
           </div>
-          
+
           <div className="flex justify-end space-x-3">
             <button
               type="button"
@@ -252,6 +197,7 @@ const HomeView = () => {
   const [currentContext, setCurrentContext] = useState(null);
   const [isCreateGroupModalOpen, setIsCreateGroupModalOpen] = useState(false);
   const [isCreatingGroup, setIsCreatingGroup] = useState(false);
+  const navigate = useNavigate();
   
   // Estado para grupos del usuario
   const [userGroups, setUserGroups] = useState([]);
@@ -305,7 +251,7 @@ const HomeView = () => {
     try {
       setIsCreatingGroup(true);
       const user = auth.currentUser;
-      
+
       if (!user) {
         toast.error("Debes iniciar sesión para crear grupos");
         return;
@@ -313,20 +259,19 @@ const HomeView = () => {
 
       // Crear el grupo usando el servicio
       const newGroup = await groupService.createGroup(
-        groupName, 
-        user.uid, 
+        groupName,
+        user.uid,
         userGroups
       );
 
       // Agregar el nuevo grupo al estado local
-      setUserGroups(prevGroups => [newGroup, ...prevGroups]);
-      
+      setUserGroups((prevGroups) => [newGroup, ...prevGroups]);
+
       // Cerrar el modal
       setIsCreateGroupModalOpen(false);
-      
+
       // Mostrar mensaje de éxito
       toast.success(`Grupo "${groupName}" creado exitosamente`);
-      
     } catch (error) {
       console.error("Error creando grupo:", error);
       // El error ya se muestra en el servicio via toast
@@ -346,16 +291,16 @@ const HomeView = () => {
   // Función para obtener el nombre del grupo actual
   const getCurrentGroupName = () => {
     if (currentContext?.groupId) {
-      const group = userGroups.find(g => g.id === currentContext.groupId);
-      return group?.name || 'Grupo Desconocido';
+      const group = userGroups.find((g) => g.id === currentContext.groupId);
+      return group?.name || "Grupo Desconocido";
     }
-    return '';
+    return "";
   };
 
   // Función para renderizar el contenido basado en la opción activa
   const renderContent = () => {
     const groupName = getCurrentGroupName();
-    
+
     switch (activeItem) {
       case "dashboard":
         return (
@@ -368,18 +313,22 @@ const HomeView = () => {
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600">Total de Grupos</span>
-                    <span className="font-bold text-blue-600">{userGroups.length}</span>
+                    <span className="font-bold text-blue-600">
+                      {userGroups.length}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600">Grupos Activos</span>
-                    <span className="font-bold text-green-600">{userGroups.length}</span>
+                    <span className="font-bold text-green-600">
+                      {userGroups.length}
+                    </span>
                   </div>
                   {userGroups.length === 0 && (
                     <div className="text-center py-4">
                       <p className="text-gray-500 text-sm">
                         No tienes grupos aún
                       </p>
-                      <button 
+                      <button
                         onClick={openCreateGroupModal}
                         className="mt-2 text-blue-600 hover:text-blue-800 text-sm font-medium"
                       >
@@ -389,7 +338,7 @@ const HomeView = () => {
                   )}
                 </div>
               </div>
-              
+
               {/* Tareas pendientes */}
               <div className="bg-white rounded-lg shadow-sm border p-6">
                 <h2 className="text-lg font-semibold mb-4">Tareas</h2>
@@ -407,15 +356,18 @@ const HomeView = () => {
                   </p>
                 </div>
               </div>
-              
+
               {/* Actividad reciente */}
               <div className="bg-white rounded-lg shadow-sm border p-6">
-                <h2 className="text-lg font-semibold mb-4">Actividad Reciente</h2>
+                <h2 className="text-lg font-semibold mb-4">
+                  Actividad Reciente
+                </h2>
                 <div className="space-y-2">
                   {userGroups.length > 0 ? (
                     userGroups.slice(0, 3).map((group) => (
                       <div key={group.id} className="text-sm text-gray-600">
-                        <span className="font-medium">Grupo creado:</span> {group.name}
+                        <span className="font-medium">Grupo creado:</span>{" "}
+                        {group.name}
                       </div>
                     ))
                   ) : (
@@ -428,20 +380,38 @@ const HomeView = () => {
             </div>
           </div>
         );
-      
+
       // Contenido específico de grupos
       case `kanban-${currentContext?.groupId}`:
-        return <KanbanContent groupId={currentContext.groupId} groupName={groupName} />;
-      
+        navigate(`/kanban/${currentContext.groupId}`, {
+          state: { groupName },
+        });
+        return null;
+
       case `users-${currentContext?.groupId}`:
-        return <GroupUsersContent groupId={currentContext.groupId} groupName={groupName} />;
-      
+        return (
+          <GroupUsersContent
+            groupId={currentContext.groupId}
+            groupName={groupName}
+          />
+        );
+
       case `reports-${currentContext?.groupId}`:
-        return <GroupReportsContent groupId={currentContext.groupId} groupName={groupName} />;
-      
+        return (
+          <GroupReportsContent
+            groupId={currentContext.groupId}
+            groupName={groupName}
+          />
+        );
+
       case `documents-${currentContext?.groupId}`:
-        return <GroupDocumentsContent groupId={currentContext.groupId} groupName={groupName} />;
-      
+        return (
+          <GroupDocumentsContent
+            groupId={currentContext.groupId}
+            groupName={groupName}
+          />
+        );
+
       // Configuración personal
       case "profile":
         return (
@@ -456,11 +426,13 @@ const HomeView = () => {
             </div>
           </div>
         );
-      
+
       case "account":
         return (
           <div className="space-y-6">
-            <h1 className="text-3xl font-bold text-gray-900">Configuración de Cuenta</h1>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Configuración de Cuenta
+            </h1>
             <div className="bg-white rounded-lg shadow-sm border p-6">
               <div className="text-center py-8">
                 <p className="text-gray-500">
@@ -470,7 +442,7 @@ const HomeView = () => {
             </div>
           </div>
         );
-      
+
       case "notifications":
         return (
           <div className="space-y-6">
@@ -484,7 +456,7 @@ const HomeView = () => {
             </div>
           </div>
         );
-      
+
       default:
         return (
           <div className="space-y-6">

@@ -88,7 +88,7 @@ const KanbanBoard = () => {
   };
 
   return (
-    <div className="p-4 bg-purple-50 min-h-screen">
+    <div className="p-4 bg-gray-50 min-h-screen">
       <DndContext
         collisionDetection={closestCorners}
         onDragStart={handleDragStart}
