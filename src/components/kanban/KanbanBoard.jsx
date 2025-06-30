@@ -1,94 +1,111 @@
-import { useState } from 'react';
-import { DndContext, DragOverlay, closestCorners } from '@dnd-kit/core';
-import { SortableContext, arrayMove } from '@dnd-kit/sortable';
-import KanbanColumn from './KanbanColumn';
-import KanbanCard from './KanbanCard';
+// components/kanban/KanbanBoard.jsx
+import { useEffect, useState } from "react";
+import {
+  collection,
+  onSnapshot,
+  doc,
+  updateDoc,
+  getDoc,
+} from "firebase/firestore";
+import { db } from "../../services/firebase/firebase"; // ajusta según tu estructura
+import { DndContext, DragOverlay, closestCorners } from "@dnd-kit/core";
+import { SortableContext, arrayMove } from "@dnd-kit/sortable";
+import KanbanColumn from "./KanbanColumn";
+import KanbanCard from "./KanbanCard";
+import ModalNuevaTarea from "./CreateTaskModal";
 
-const KanbanBoard = () => {
-  // Estado inicial del tablero
-  const [columns, setColumns] = useState({
-    todo: {
-      id: 'todo',
-      title: '📝 Por hacer',
-      cards: [
-        { id: '1', content: 'Diseñar interfaz' },
-        { id: '2', content: 'Revisar requisitos' },
-      ],
-    },
-    inProgress: {
-      id: 'inProgress',
-      title: '🚀 En progreso',
-      cards: [{ id: '3', content: 'Integrar DnD' }],
-    },
-    done: {
-      id: 'done',
-      title: '✅ Terminado',
-      cards: [{ id: '4', content: 'Configurar proyecto' }],
-    },
-  });
-
+const KanbanBoard = ({ groupId, groupName }) => {
+  const [columns, setColumns] = useState({});
   const [activeCard, setActiveCard] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Manejadores de drag-and-drop
+  // 🧩 1. Leer tablero en tiempo real
+  useEffect(() => {
+    if (!groupId) return;
+
+    const boardRef = collection(db, "groups", groupId, "board");
+
+    const unsubscribe = onSnapshot(boardRef, (snapshot) => {
+      const data = {};
+      snapshot.forEach((doc) => {
+        data[doc.id] = {
+          id: doc.id,
+          title: doc.data().title,
+          cards: doc.data().cards || [],
+        };
+      });
+
+      setColumns(data);
+    });
+
+    return () => unsubscribe();
+  }, [groupId]);
+
+  // 🧩 2. Lógica de drag & drop
   const handleDragStart = (event) => {
-    const { active } = event;
-    setActiveCard(active.data.current.card);
+    const { card, columnId, index } = event.active.data.current;
+    setActiveCard({ ...card, columnId, index });
   };
 
-  const handleDragEnd = (event) => {
+  const handleAddTask = async ({ content, description }) => {
+    const newCard = {
+      id: crypto.randomUUID(),
+      content,
+      description,
+    };
+
+    const columnRef = doc(db, "groups", groupId, "board", "todo");
+    const columnSnap = await getDoc(columnRef);
+    const currentCards = columnSnap.data()?.cards || [];
+
+    const updatedCards = [...currentCards, newCard];
+    await updateDoc(columnRef, { cards: updatedCards });
+  };
+
+  const handleDragEnd = async (event) => {
     const { active, over } = event;
     if (!over) return;
 
     const activeColumnId = active.data.current.columnId;
     const overColumnId = over.data.current?.columnId || over.id;
+    if (!activeColumnId || !overColumnId) return;
 
-    // Mismo contenedor: reordenar
-    if (activeColumnId === overColumnId) {
-      setColumns((prev) => {
-        const newCards = arrayMove(
-          prev[activeColumnId].cards,
-          active.data.current.index,
-          over.data.current?.index || 0
-        );
-        return {
-          ...prev,
-          [activeColumnId]: {
-            ...prev[activeColumnId],
-            cards: newCards,
-          },
-        };
-      });
-    } else {
-      // Cambio de columna
-      setColumns((prev) => {
-        const activeCards = [...prev[activeColumnId].cards];
-        const overCards = [...prev[overColumnId].cards];
-        const movedCard = activeCards[active.data.current.index];
+    const activeIndex = active.data.current.index;
+    const overIndex = over.data.current?.index ?? 0;
 
-        // Remueve de la columna original
-        activeCards.splice(active.data.current.index, 1);
-        // Agrega a la nueva columna
-        overCards.splice(over.data.current?.index || 0, 0, movedCard);
+    // ✅ Evita cambios innecesarios
+    if (activeColumnId === overColumnId && activeIndex === overIndex) {
+      setActiveCard(null);
+      return;
+    }
 
-        return {
-          ...prev,
-          [activeColumnId]: {
-            ...prev[activeColumnId],
-            cards: activeCards,
-          },
-          [overColumnId]: {
-            ...prev[overColumnId],
-            cards: overCards,
-          },
-        };
-      });
+    const sourceCards = [...columns[activeColumnId].cards];
+    const destinationCards = [...columns[overColumnId].cards];
+
+    const [movedCard] = sourceCards.splice(activeIndex, 1);
+    destinationCards.splice(overIndex, 0, movedCard);
+
+    try {
+      const sourceRef = doc(db, "groups", groupId, "board", activeColumnId);
+      const destRef = doc(db, "groups", groupId, "board", overColumnId);
+
+      await Promise.all([
+        updateDoc(sourceRef, { cards: sourceCards }),
+        updateDoc(destRef, { cards: destinationCards }),
+      ]);
+    } catch (error) {
+      console.error("Error actualizando columnas:", error);
     }
 
     setActiveCard(null);
   };
 
   return (
-    <div className="p-4 bg-gray-50 min-h-screen">
+    <div className="p-4  bg-gradient-to-br from-slate-900 via-cyan-900 to-blue-900 min-h-screen">
+      <h1 className="text-2xl font-bold text-white mt-8 mb-8 text-center">
+        Tablero {groupName}
+      </h1>
+
       <DndContext
         collisionDetection={closestCorners}
         onDragStart={handleDragStart}
@@ -96,14 +113,23 @@ const KanbanBoard = () => {
       >
         <div className="flex gap-4 overflow-x-auto">
           <SortableContext items={Object.keys(columns)}>
-            {Object.values(columns).map((column) => (
-              <KanbanColumn
-                key={column.id}
-                id={column.id}
-                title={column.title}
-                cards={column.cards}
-              />
-            ))}
+            {["todo", "inProgress", "done"]
+              .map((columnId) => columns[columnId])
+              .filter(Boolean)
+              .map((column) => (
+                <KanbanColumn
+                  key={column.id}
+                  id={column.id}
+                  title={column.title}
+                  cards={column.cards}
+                  groupId={groupId}
+                  onOpenModal={
+                    column.id === "todo"
+                      ? () => setIsModalOpen(true)
+                      : undefined
+                  }
+                />
+              ))}
           </SortableContext>
         </div>
 
@@ -111,14 +137,19 @@ const KanbanBoard = () => {
           {activeCard && (
             <KanbanCard
               card={activeCard}
-              style={{
-                transform: 'rotate(3deg)',
-                boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
-              }}
+              groupId={groupId}
+              columnId={activeCard.columnId || ""}
+              index={activeCard.index || 0}
             />
           )}
         </DragOverlay>
       </DndContext>
+
+      <ModalNuevaTarea
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleAddTask}
+      />
     </div>
   );
 };

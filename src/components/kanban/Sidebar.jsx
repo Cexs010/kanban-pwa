@@ -229,7 +229,7 @@ const Sidebar = ({
       {/* Mobile menu button */}
       <button
         onClick={onToggleSidebar}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-md bg-white shadow-md hover:bg-gray-50 transition-colors"
+        className="lg:hidden fixed top-16 left-4 z-50 p-2 rounded-md bg-white shadow-md hover:bg-gray-50 transition-colors"
       >
         {isOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
@@ -237,52 +237,27 @@ const Sidebar = ({
       {/* Sidebar */}
       <div
         className={`
-        fixed top-0 left-0 z-40 h-full w-64 bg-white border-r border-gray-200 shadow-lg
+        fixed top-0 left-0 z-40 h-full w-64 bg-white border-r border-gray-200 shadow
         transform transition-transform duration-300 ease-in-out overflow-y-auto
         ${isOpen ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0 lg:static lg:z-auto
       `}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 sticky top-0 bg-white z-10">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200 sticky top-0 z-10">
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">K</span>
+              <span className="text-white font-bold text-lg">A</span>
             </div>
             <span className="text-xl font-semibold text-gray-800">
-              Kanban PWA
+              AgilBan
             </span>
           </div>
         </div>
 
         {/* Navigation */}
         <nav className="flex-1 px-4 py-6 space-y-4">
-          {/* Main Menu Items */}
-          <div className="space-y-1">
-            {mainMenuItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeItem === item.id;
-              
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => handleMenuItemClick(item.id)}
-                  className={`
-                    w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left
-                    transition-colors duration-200
-                    ${
-                      isActive
-                        ? "bg-blue-50 text-blue-700 border border-blue-200"
-                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                    }
-                  `}
-                >
-                  <Icon size={20} />
-                  <span className="font-medium">{item.label}</span>
-                </button>
-              );
-            })}
-          </div>
+
 
           {/* Sección de Grupos */}
           <div className="space-y-2">
@@ -350,7 +325,7 @@ const Sidebar = ({
         </nav>
 
         {/* User Footer */}
-        <div className="border-t border-gray-200 p-4 sticky bottom-0 bg-white">
+        <div className="border-t border-gray-200 p-4 sticky bottom-0 ">
           <div className="flex items-center space-x-3 mb-3">
             <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
               <User size={20} className="text-gray-600" />

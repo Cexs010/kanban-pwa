@@ -45,10 +45,9 @@ function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-sm">
       <form
         onSubmit={handleSubmit}
-        className="bg-white/95 p-4 sm:p-6 rounded-lg shadow-md border border-gray-300"
+        className="bg-white/95 p-4 sm:p-6 rounded-xl shadow-md w-full max-w-xs sm:max-w-sm border border-gray-300"
       >
         <h1 className="text-center text-xl sm:text-2xl font-semibold mb-3 sm:mb-4">
           Iniciar Sesión
@@ -58,7 +57,7 @@ function LoginForm() {
           <div>
             <label
               htmlFor="email"
-              className="text-sm font-medium text-gray-700"
+              className="md:text-sm text-xs font-medium text-gray-700"
             >
               Correo Electrónico
             </label>
@@ -67,7 +66,7 @@ function LoginForm() {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block h-10 w-full py-2 px-3.5"
+              className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 md:text-sm text-xs rounded-lg block h-10 w-full py-2 px-3.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Ingresa tu correo"
               required
             />
@@ -76,7 +75,7 @@ function LoginForm() {
           <div>
             <label
               htmlFor="password"
-              className="text-sm font-medium text-gray-700"
+              className="md:text-sm text-xs font-medium text-gray-700"
             >
               Contraseña
             </label>
@@ -86,7 +85,7 @@ function LoginForm() {
               placeholder="Ingresa tu contraseña"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full h-10 py-2 px-3.5"
+              className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 md:text-sm text-xs rounded-lg block w-full h-10 py-2 px-3.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
           </div>
@@ -122,7 +121,6 @@ function LoginForm() {
           </button>
         </div>
       </form>
-    </div>
   );
 }
 

@@ -58,7 +58,7 @@ const RegisterForm = () => {
         <div>
           <label
             htmlFor="displayName"
-            className="text-sm font-medium text-gray-700"
+            className="md:text-sm text-xs font-medium text-gray-700"
           >
             Nombre Completo
           </label>
@@ -67,7 +67,7 @@ const RegisterForm = () => {
             id="displayName"
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
-            className="mt-1 bg-gray-50 border border-gray-300 text-sm rounded-md w-full h-9 px-3"
+            className="mt-1 bg-gray-50 border border-gray-300 md:text-sm text-xs rounded-md w-full h-9 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Ingresa tu nombre completo"
             autoComplete="off"
             required
@@ -75,7 +75,7 @@ const RegisterForm = () => {
         </div>
 
         <div>
-          <label htmlFor="email" className="text-sm font-medium text-gray-700">
+          <label htmlFor="email" className="md:text-sm text-xs font-medium text-gray-700">
             Correo Electrónico
           </label>
           <input
@@ -83,7 +83,7 @@ const RegisterForm = () => {
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 bg-gray-50 border border-gray-300 text-sm rounded-md w-full h-9 px-3"
+            className="mt-1 bg-gray-50 border border-gray-300 md:text-sm text-xs rounded-md w-full h-9 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Ingresa tu correo electrónico"
             autoComplete="off"
             required
@@ -93,7 +93,7 @@ const RegisterForm = () => {
         <div>
           <label
             htmlFor="password"
-            className="text-sm font-medium text-gray-700"
+            className="md:text-sm text-xs font-medium text-gray-700"
           >
             Contraseña
           </label>
@@ -102,7 +102,7 @@ const RegisterForm = () => {
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 bg-gray-50 border border-gray-300 text-sm rounded-md w-full h-9 px-3"
+            className="mt-1 bg-gray-50 border border-gray-300 md:text-sm text-xs rounded-md w-full h-9 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Ingresa tu contraseña"
             minLength="6"
             autoComplete="off"
@@ -117,9 +117,9 @@ const RegisterForm = () => {
             className="mt-1 w-4 h-4 border-gray-300 rounded-sm"
             required
           />
-          <label htmlFor="terms" className="text-gray-700 leading-5">
+          <label htmlFor="terms" className="text-gray-700 md:text-sm text-xs leading-5">
             Acepto los{" "}
-            <a href="#" className="text-cyan-700 hover:underline">
+            <a href="#" className="text-cyan-700 md:text-sm text-xs hover:underline">
               términos y condiciones
             </a>
           </label>
@@ -156,9 +156,9 @@ const RegisterForm = () => {
         Google
       </button>
 
-      <p className="mt-3 text-center text-sm text-gray-600">
+      <p className="mt-3 text-center md:text-sm text-xs text-gray-600">
         ¿Ya tienes cuenta?{" "}
-        <Link to="/login" className="text-cyan-700 hover:underline">
+        <Link to="/login" className="text-cyan-700 md:text-sm text-xs hover:underline">
           Inicia sesión
         </Link>
       </p>

@@ -1,11 +1,13 @@
-import { 
-  addDoc, 
-  collection, 
-  serverTimestamp, 
-  query, 
-  where, 
-  getDocs, 
-  orderBy 
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+  query,
+  where,
+  getDocs,
+  orderBy,
+  doc,
+  setDoc,
 } from "firebase/firestore";
 import { db } from "./firebase";
 import toast from "react-hot-toast";
@@ -13,7 +15,6 @@ import toast from "react-hot-toast";
 export const groupService = {
   createGroup: async (groupName, userId, groups = []) => {
     try {
-      // Validaciones
       if (!groupName.trim()) {
         throw new Error("El nombre del grupo no puede estar vacío");
       }
@@ -22,7 +23,6 @@ export const groupService = {
         throw new Error("Debes iniciar sesión para crear grupos");
       }
 
-      // Verificar duplicados
       const groupExists = groups.some(
         (group) => group.name.toLowerCase() === groupName.trim().toLowerCase()
       );
@@ -31,31 +31,43 @@ export const groupService = {
         throw new Error("Ya existe un grupo con ese nombre");
       }
 
-      // Crear el objeto grupo
       const newGroup = {
         name: groupName.trim(),
-        description: "", // Descripción vacía por defecto
+        description: "",
         createdAt: serverTimestamp(),
         createdBy: userId,
-        members: [userId], // El creador es automáticamente miembro
+        members: [userId],
         memberCount: 1,
         taskCount: 0,
         updatedAt: serverTimestamp(),
       };
 
-      // Guardar en Firestore
-      const docRef = await addDoc(collection(db, "groups"), newGroup);
+      const groupDocRef = await addDoc(collection(db, "groups"), newGroup);
 
-      // Retornar el grupo con ID para el estado local
+      // Crear columnas por defecto en la subcolección "board"
+      const boardColumns = [
+        { id: "todo", title: "📝 Por hacer", cards: [] },
+        { id: "inProgress", title: "🚀 En progreso", cards: [] },
+        { id: "done", title: "✅ Terminado", cards: [] },
+      ];
+
+      for (const column of boardColumns) {
+        const columnRef = doc(db, "groups", groupDocRef.id, "board", column.id);
+        await setDoc(columnRef, {
+          title: column.title,
+          cards: column.cards,
+        });
+      }
+
       return {
-        id: docRef.id,
+        id: groupDocRef.id,
         name: newGroup.name,
         description: newGroup.description,
         createdBy: userId,
         members: newGroup.members,
         memberCount: newGroup.memberCount,
         taskCount: newGroup.taskCount,
-        createdAt: new Date(), // Para el estado local usamos Date actual
+        createdAt: new Date(),
         updatedAt: new Date(),
       };
     } catch (error) {
@@ -71,7 +83,6 @@ export const groupService = {
         throw new Error("ID de usuario requerido");
       }
 
-      // Query para obtener grupos donde el usuario es miembro
       const q = query(
         collection(db, "groups"),
         where("members", "array-contains", userId),
@@ -104,7 +115,6 @@ export const groupService = {
     }
   },
 
-  // Función auxiliar para actualizar contadores (opcional, para uso futuro)
   updateGroupCounts: async (groupId, updates) => {
     try {
       const groupRef = doc(db, "groups", groupId);

@@ -13,7 +13,7 @@ const NavbarKanban = () => {
   };
 
   return (
-    <nav className="h-16 bg-cyan-900 bg-opacity-90 backdrop-blur-sm shadow-lg overflow-visible">
+    <nav className="relative z-50 h-16 bg-cyan-900 bg-opacity-90 backdrop-blur-sm shadow-md">
       <div className="container mx-auto flex items-center justify-between h-full px-4">
         <Link
           to="/home"
@@ -22,9 +22,9 @@ const NavbarKanban = () => {
           <img
             src="/Kanban_192x192.png"
             alt="Logo"
-            className="w-15 h-15 object-contain mr-5"
+            className="w-12 h-12 object-contain mr-2"
           />
-          Tablero
+          Inicio
         </Link>
 
         {/* Botón hamburguesa */}
@@ -76,8 +76,8 @@ const NavbarKanban = () => {
 
       {/* Menú desplegable en móvil */}
       {menuOpen && (
-        <div className="md:hidden flex px-5 py-3 bg-cyan-900 flex-col gap-2">
-          <hr className="border-white/20"/>
+        <div className="absolute top-full left-0 w-full md:hidden bg-cyan-900 z-40 px-5 py-3 flex flex-col gap-2 shadow-md">
+          <hr className="border-white/20" />
           <Link
             to="/profile"
             onClick={() => setMenuOpen(false)}
