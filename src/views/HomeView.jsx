@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/dashboard/Sidebar";
 import CreateGroupModal from "../components/group/CreateGroupModal";
-import ContentRenderer from "../components/content/ContentRenderer.jsx";
+import ContentRenderer from "../components/content/ContentRenderer";
 import { useUserGroups } from "../hooks/useUserGroups";
 import { useGroupOperations } from "../hooks/useGroupOperations";
 
