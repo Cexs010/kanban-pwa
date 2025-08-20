@@ -1,4 +1,4 @@
-import DashboardStats from "../dashboard/DashboardStats";
+import DashboardStats from "./DashboardStats";
 import GroupUsersContent from "../group/GroupUsersContent";
 import GroupReportsContent from "../group/GroupReportsContent";
 import GroupDocumentsContent from "../group/GroupDocumentsContent";
