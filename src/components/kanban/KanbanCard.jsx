@@ -50,28 +50,33 @@ const KanbanCard = ({ card, columnId, index, groupId }) => {
 
   return (
     <div
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-      className="bg-purple-50 p-3 rounded-lg shadow-lg border border-purple-200 cursor-grab active:cursor-grabbing hover:scale-[1.02] hover:shadow-xl transition-transform duration-200 flex justify-between items-center"
-    >
-      <div className="flex-1">{card.content}</div>
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          if (!deleting) handleDelete();
-        }}
-        disabled={deleting}
-        className={`text-red-500 hover:text-red-700 ml-2 ${
-          deleting ? "opacity-50 cursor-not-allowed" : ""
-        }`}
-        title="Eliminar tarjeta"
-      >
-        <Trash2 size={18} />
-      </button>
-    </div>
+  ref={setNodeRef}
+  style={style}
+  {...attributes}
+  {...listeners}
+  className={`kanban-card relative bg-white p-4 rounded-xl shadow-md 
+  cursor-grab active:cursor-grabbing hover:scale-[1.02] hover:shadow-lg 
+  transition-all duration-200 flex justify-between items-start`}
+>
+  <div className="flex-1 font-semibold text-gray-800 whitespace-pre-line">
+    {card.content}
+  </div>
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      if (!deleting) handleDelete();
+    }}
+    disabled={deleting}
+    className={`text-red-500 hover:text-red-700 ml-3 mt-1 ${
+      deleting ? "opacity-50 cursor-not-allowed" : ""
+    }`}
+    title="Eliminar tarjeta"
+  >
+    <Trash2 size={20} />
+  </button>
+</div>
+
   );
 };
 

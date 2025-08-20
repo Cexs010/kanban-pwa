@@ -7,6 +7,7 @@ const KanbanView = () => {
   const groupName = location.state?.groupName || "Sin nombre"; // Por si no viene
 
   return <KanbanBoard groupId={groupId} groupName={groupName} />;
+
 };
 
 export default KanbanView;

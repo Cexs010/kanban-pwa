@@ -1,14 +1,26 @@
-// components/CreateGroupModalUI.jsx
+import { useState } from "react";
 import { X, Plus } from "lucide-react";
 
-const CreateGroupModalUI = ({
-  isOpen,
-  groupName,
-  isLoading,
-  onClose,
-  onChange,
-  onSubmit,
-}) => {
+const CreateGroupModal = ({ isOpen, onClose, onCreateGroup, isLoading }) => {
+  const [groupName, setGroupName] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (groupName.trim()) {
+      await onCreateGroup(groupName.trim());
+      setGroupName("");
+    }
+  };
+
+  const handleClose = () => {
+    setGroupName("");
+    onClose();
+  };
+
+  const handleInputChange = (e) => {
+    setGroupName(e.target.value);
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -19,7 +31,7 @@ const CreateGroupModalUI = ({
             Crear Nuevo Grupo
           </h2>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
             disabled={isLoading}
           >
@@ -27,7 +39,7 @@ const CreateGroupModalUI = ({
           </button>
         </div>
 
-        <form onSubmit={onSubmit} className="p-6">
+        <form onSubmit={handleSubmit} className="p-6">
           <div className="mb-4">
             <label
               htmlFor="groupName"
@@ -39,7 +51,7 @@ const CreateGroupModalUI = ({
               type="text"
               id="groupName"
               value={groupName}
-              onChange={onChange}
+              onChange={handleInputChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Ingresa el nombre del grupo"
               disabled={isLoading}
@@ -50,7 +62,7 @@ const CreateGroupModalUI = ({
           <div className="flex justify-end space-x-3">
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleClose}
               className="px-4 py-2 text-gray-600 bg-gray-300 hover:text-red-600 font-semibold transition-colors duration-200 rounded-lg"
               disabled={isLoading}
             >
@@ -80,4 +92,4 @@ const CreateGroupModalUI = ({
   );
 };
 
-export default CreateGroupModalUI;
+export default CreateGroupModal;

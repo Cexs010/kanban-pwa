@@ -8,10 +8,10 @@ const KanbanColumn = ({ id, title, cards, groupId ,onOpenModal }) => {
   return (
     <div
       ref={setNodeRef}
-      className="flex flex-col w-100 bg-white rounded-lg shadow-sm p-4 border border-purple-100"
+      className="flex flex-col min-w-100  bg-white/70 rounded-lg shadow-md p-4 border-none"
     >
       <div className="flex justify-between items-center mb-4">
-        <h2 className="font-bold text-gray-800">{title}</h2>
+        <h2 className="font-bold text-1xl text-gray-800">{title}</h2>
         {id === "todo" && (
           <button
             onClick={onOpenModal}

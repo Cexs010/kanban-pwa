@@ -8,6 +8,8 @@ import {
   orderBy,
   doc,
   setDoc,
+  updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "./firebase";
 import toast from "react-hot-toast";
@@ -46,9 +48,9 @@ export const groupService = {
 
       // Crear columnas por defecto en la subcolección "board"
       const boardColumns = [
-        { id: "todo", title: "📝 Por hacer", cards: [] },
-        { id: "inProgress", title: "🚀 En progreso", cards: [] },
-        { id: "done", title: "✅ Terminado", cards: [] },
+        { id: "todo", title: "Por hacer", cards: [] },
+        { id: "inProgress", title: "En progreso", cards: [] },
+        { id: "done", title: "Terminado", cards: [] },
       ];
 
       for (const column of boardColumns) {
@@ -126,5 +128,27 @@ export const groupService = {
       console.error("Error actualizando contadores del grupo:", error);
       throw error;
     }
-  }
+  },
+
+  deleteGroup: async (groupId) => {
+    try {
+      if (!groupId) throw new Error("ID de grupo requerido");
+
+      // 1. Borrar subcolección "board"
+      const boardRef = collection(db, "groups", groupId, "board");
+      const boardSnapshot = await getDocs(boardRef);
+
+      const deleteBoardPromises = boardSnapshot.docs.map((docSnap) =>
+        deleteDoc(docSnap.ref)
+      );
+      await Promise.all(deleteBoardPromises);
+
+      // 2. Borrar el grupo en sí
+      await deleteDoc(doc(db, "groups", groupId));
+    } catch (error) {
+      console.error("Error eliminando grupo:", error);
+      toast.error("No se pudo eliminar el grupo");
+      throw error;
+    }
+  },
 };

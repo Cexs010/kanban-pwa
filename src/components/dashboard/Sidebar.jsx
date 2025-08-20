@@ -26,6 +26,8 @@ const Sidebar = ({
   userGroups = [], // Array de grupos del usuario
   onCreateGroup, // Función para crear nuevo grupo
   isLoadingGroups = false, // Estado de carga de grupos
+  onDeleteGroup = () => {},     
+  isDeletingGroup = false, 
 }) => {
   const [expandedGroups, setExpandedGroups] = useState(new Set());
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -133,77 +135,66 @@ const Sidebar = ({
       const isExpanded = expandedGroups.has(group.id);
       const groupMenuItems = getGroupMenuItems(group.id);
 
+
       return (
         <div key={group.id} className="space-y-1">
           {/* Group Header */}
-          <button
-            onClick={() => toggleGroupExpansion(group.id)}
-            className="w-full flex items-center justify-between px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors duration-200"
-          >
-            <div className="flex items-center space-x-3 min-w-0">
-              <Folder
-                size={18}
-                className="text-gray-500 flex-shrink-0"
-              />
-              <div className="min-w-0">
-                <span className="font-medium truncate block text-left">
+          <div className="flex items-center justify-between px-3 py-2 hover:bg-gray-50 rounded-lg transition-colors">
+            <button
+              onClick={() => toggleGroupExpansion(group.id)}
+              className="flex items-center space-x-3 min-w-0 flex-1 text-gray-700"
+            >
+              <Folder size={18} className="text-gray-500 flex-shrink-0" />
+              <div className="min-w-0 text-left">
+                <span className="font-medium truncate block">
                   {group.name}
                 </span>
-                {/* Información adicional del grupo */}
                 {(group.memberCount || group.taskCount) && (
                   <div className="flex items-center space-x-2 text-xs text-gray-500">
-                    {group.memberCount && (
-                      <span>{group.memberCount} miembros</span>
-                    )}
-                    {group.taskCount && (
-                      <span>{group.taskCount} tareas</span>
-                    )}
+                    {group.memberCount && <span>{group.memberCount} miembros</span>}
+                    {group.taskCount && <span>{group.taskCount} tareas</span>}
                   </div>
                 )}
               </div>
-            </div>
-            <ChevronDown
-              size={16}
-              className={`transform transition-transform duration-200 flex-shrink-0 ${
-                isExpanded ? "rotate-180" : ""
-              }`}
-            />
-          </button>
+              <ChevronDown
+                size={16}
+                className={`transform transition-transform duration-200 ${isExpanded ? "rotate-180" : ""
+                  }`}
+              />
+            </button>
+
+            {/* Botón eliminar grupo */}
+            <button
+              onClick={() => {
+                if (window.confirm(`¿Seguro que quieres eliminar "${group.name}"?`)) {
+                  // `onDeleteGroup` viene de HomeView
+                  onDeleteGroup(group.id);
+                }
+              }}
+              disabled={isDeletingGroup}
+              className="ml-2 text-red-500 hover:text-red-700 disabled:opacity-50"
+              title="Eliminar grupo"
+            >
+              ✕
+            </button>
+          </div>
 
           {/* Group Menu Items */}
           <div
-            className={`
-              space-y-1 transition-all duration-200 overflow-hidden
-              ${
-                isExpanded
-                  ? "max-h-96 opacity-100"
-                  : "max-h-0 opacity-0"
-              }
-            `}
+            className={`space-y-1 transition-all duration-200 overflow-hidden ${isExpanded ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+              }`}
           >
             {groupMenuItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeItem === item.id;
-
               return (
                 <button
                   key={item.id}
-                  onClick={() =>
-                    handleMenuItemClick(
-                      item.id,
-                      item.groupId,
-                      item.type
-                    )
-                  }
-                  className={`
-                    w-full flex items-center space-x-3 px-9 py-2 rounded-lg text-left
-                    transition-colors duration-200 text-sm
-                    ${
-                      isActive
-                        ? "bg-blue-50 text-blue-700 border border-blue-200"
-                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                    }
-                  `}
+                  onClick={() => handleMenuItemClick(item.id, item.groupId, item.type)}
+                  className={`w-full flex items-center space-x-3 px-9 py-2 rounded-lg text-left text-sm transition-colors duration-200 ${isActive
+                      ? "bg-blue-50 text-blue-700 border border-blue-200"
+                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                    }`}
                 >
                   <Icon size={16} />
                   <span className="font-medium">{item.label}</span>
@@ -213,6 +204,7 @@ const Sidebar = ({
           </div>
         </div>
       );
+
     });
   };
 
@@ -244,7 +236,7 @@ const Sidebar = ({
       `}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 sticky top-0 z-10">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200 top-0 z-10">
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">A</span>
@@ -291,9 +283,8 @@ const Sidebar = ({
               </div>
               <ChevronDown
                 size={16}
-                className={`transform transition-transform duration-200 ${
-                  isSettingsOpen ? "rotate-180" : ""
-                }`}
+                className={`transform transition-transform duration-200 ${isSettingsOpen ? "rotate-180" : ""
+                  }`}
               />
             </button>
 
@@ -310,10 +301,9 @@ const Sidebar = ({
                   onClick={() => handleMenuItemClick(item.id)}
                   className={`
                     w-full text-left px-9 py-2 text-sm rounded-lg transition-colors duration-200
-                    ${
-                      activeItem === item.id
-                        ? "bg-blue-50 text-blue-700"
-                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                    ${activeItem === item.id
+                      ? "bg-blue-50 text-blue-700"
+                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                     }
                   `}
                 >
@@ -325,7 +315,7 @@ const Sidebar = ({
         </nav>
 
         {/* User Footer */}
-        <div className="border-t border-gray-200 p-4 sticky bottom-0 ">
+        <div className="border-t border-gray-200 p-4 bottom-0">
           <div className="flex items-center space-x-3 mb-3">
             <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
               <User size={20} className="text-gray-600" />

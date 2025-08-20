@@ -1,5 +1,5 @@
 import { useAuth } from "../app/context/AuthContext.jsx";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import LandingPage from "../views/LandingPage.jsx";
 import Login from "../views/LoginView.jsx";
 import Navbar from "../components/Navbar";
@@ -12,9 +12,15 @@ import HomeView from "../views/HomeView.jsx";
 
 const Router = () => {
   const { user } = useAuth();
+  const location = useLocation();
+
+  // si la ruta actual es /home, no mostrar navbar
+  const hideNavbar = location.pathname === "/home";
+
   return (
     <>
-      {user ? <NavbarKanban /> : <Navbar />}
+      {!hideNavbar && (user ? <NavbarKanban /> : <Navbar />)}
+
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />

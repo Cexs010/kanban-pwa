@@ -101,36 +101,41 @@ const KanbanBoard = ({ groupId, groupName }) => {
   };
 
   return (
-    <div className="p-4  bg-gradient-to-br from-slate-900 via-cyan-900 to-blue-900 min-h-screen">
-      <h1 className="text-2xl font-bold text-white mt-8 mb-8 text-center">
-        Tablero {groupName}
-      </h1>
+    <div className="bg-gradient-to-br from-slate-900 via-cyan-900 to-blue-900 min-h-screen w-full flex flex-col">
+      <div className="flex-shrink-0">
+        <h1 className="text-2xl font-bold text-white mt-8 mb-8 text-center">
+          Tablero {groupName}
+        </h1>
+      </div>
 
       <DndContext
         collisionDetection={closestCorners}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <div className="flex gap-4 overflow-x-auto">
-          <SortableContext items={Object.keys(columns)}>
-            {["todo", "inProgress", "done"]
-              .map((columnId) => columns[columnId])
-              .filter(Boolean)
-              .map((column) => (
-                <KanbanColumn
-                  key={column.id}
-                  id={column.id}
-                  title={column.title}
-                  cards={column.cards}
-                  groupId={groupId}
-                  onOpenModal={
-                    column.id === "todo"
-                      ? () => setIsModalOpen(true)
-                      : undefined
-                  }
-                />
-              ))}
-          </SortableContext>
+        {/* Wrapper scrollable horizontal */}
+        <div className="overflow-x-auto w-full flex-grow">
+          <div className="flex justify-around gap-5">
+            <SortableContext items={Object.keys(columns)}>
+              {["todo", "inProgress", "done"]
+                .map((columnId) => columns[columnId])
+                .filter(Boolean)
+                .map((column) => (
+                  <KanbanColumn
+                    key={column.id}
+                    id={column.id}
+                    title={column.title}
+                    cards={column.cards}
+                    groupId={groupId}
+                    onOpenModal={
+                      column.id === "todo"
+                        ? () => setIsModalOpen(true)
+                        : undefined
+                    }
+                  />
+                ))}
+            </SortableContext>
+          </div>
         </div>
 
         <DragOverlay>
@@ -151,6 +156,8 @@ const KanbanBoard = ({ groupId, groupName }) => {
         onSubmit={handleAddTask}
       />
     </div>
+
+
   );
 };
 

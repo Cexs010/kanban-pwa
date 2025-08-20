@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
-import { db } from "../../services/firebase/firebase";
-import { useAuth } from "../context/AuthContext";
+import { db } from "../services/firebase/firebase";
+import { useAuth } from "../app/context/AuthContext";
 
 export const useGroups = () => {
   const [groups, setGroups] = useState([]);
