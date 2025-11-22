@@ -1,12 +1,121 @@
-# React + Vite
+# Kanban PWA
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación Web Progresiva (PWA) desarrollada con **React + Vite**, diseñada para gestionar tareas mediante un tablero Kanban moderno, responsivo y fácil de usar.
 
-Currently, two official plugins are available:
+Este documento explica cómo **descargar**, **configurar**, **instalar**, **ejecutar** y **usar** el proyecto en local, incluyendo la configuración de **Firebase**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## Características principales
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* Tablero Kanban totalmente funcional
+* Instalación como PWA en navegadores compatibles
+* Integración con **Firebase** (autenticación, almacenamiento, persistencia)
+* Construido con **React + Vite**
+
+---
+
+## Requisitos previos
+
+Asegúrate de tener instalado:
+
+* **Node.js 18+**
+* **npm**
+* **Git**
+
+Verificar versiones:
+
+```
+node -v
+npm -v
+```
+
+---
+
+## Descargar o clonar el repositorio
+
+### Clonar con Git
+
+```
+git clone https://github.com/Cexs010/kanban-pwa.git
+cd kanban-pwa
+```
+
+### Descargar ZIP
+
+1. Ir al repositorio en GitHub
+2. Clic en **Code → Download ZIP**
+3. Descomprimir
+4. Abrir la carpeta
+
+---
+
+## ⚙️ Configuración del entorno (.env)
+
+Crear un archivo `.env` en la raíz.
+
+### Ejemplo de `.env.example`:
+
+```
+VITE_FIREBASE_API_KEY=YOUR_API_KEY
+VITE_FIREBASE_AUTH_DOMAIN=YOUR_AUTH_DOMAIN
+VITE_FIREBASE_PROJECT_ID=YOUR_PROJECT_ID
+VITE_FIREBASE_STORAGE_BUCKET=YOUR_STORAGE_BUCKET
+VITE_FIREBASE_MESSAGING_SENDER_ID=YOUR_MESSAGING_SENDER_ID
+VITE_FIREBASE_APP_ID=YOUR_APP_ID
+```
+
+
+---
+
+## Instalación de dependencias
+
+```
+npm install
+```
+
+---
+
+## ▶️ Ejecutar el proyecto en local
+
+```
+npm run dev
+```
+
+Abrir en el navegador:
+
+```
+http://localhost:5173
+```
+
+---
+
+## 📱 Instalación como PWA
+
+1. Abrir la aplicación en Chrome/Edge
+2. Clic en el botón “Instalar aplicación”
+3. Confirmar
+4. La app queda disponible offline
+
+---
+
+## 📁 Estructura del proyecto
+
+```
+kanban-pwa/
+│── public/
+│   ├── manifest.json
+│   └── icons/
+│
+│── src/
+│   ├── components/
+│   ├── pages/
+│   ├── hooks/
+│   ├── context/
+│   ├── services/
+│   └── main.jsx
+│
+│── .env.example
+│── package.json
+│── vite.config.js
+```
